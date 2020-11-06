@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block css %}
+
+<style>
+    #post_img{
+        width: 460px;
+        height: 360px;
+    }
+</style>
+
+{% endblock css %}
+
+{% block body %}
+<div class = "container">
+    <div class="card-body text-center">
+        <img src = "{{post.image.url}}" alt="image" id = "post_img">
+        <hr>
+        <br/>
+
+
+    </div>
+    <br/><br/>
+    <form action = "{% url 'like_post' post.pk %}" method="POST">
+        {% csrf_token %}
+        {% if liked %}
+        <button type="submit", name="post_id", value="{{ post.id }}" class="btn btn-danger btn-small" >
+            UnLike
+        </button>
+        {% else %}
+        <button type="submit", name="post_id", value="{{ post.id }}" class="btn btn-primary btn-small" >
+            Like
+        </button>
+        {% endif %}
+         - {{ total_likes }}
+    </form>
+<div class = "container">
+    <h2>Comments</h2>
+    <div class = "card">
+        <div class = "card-body">
+            {% if not post.comments.all %}
+            Be the first person to comment <a href="{% url 'add_comment' post.pk %}">Add one</a>
+            {% else %}
+            <div class="mx-4">
+                <a href="{% url 'add_comment' post.pk %}" >Comment
+                </a>
+                <br/><br/>
+                </div>
+                {% for comment in post.comments.all %}
+                    <strong>{{ comment.user}} - <i>{{ comment.timestamp }}</i></strong><br/>
+                    {{comment.content}}
+                    
+                    <br/>
+                    <div class="reply mx-0">
+                        <p>
+                            
+                            <button class="btn btn-secondary btn-small" type="button" data-toggle="collapse" data-target="#replybox{{comment.id}}" aria-expanded="false" aria-controls="replybox{{comment.id}}">
+                              Reply
+                            </button>
+                          </p>
+                          <div class="collapse" id="replybox{{comment.id}}">
+                            
+                                <form method="POST">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="comment_id" value="{{comment.id}}">
+                            
+                                    {{ form }}
+                            
+                                    <button class="btn btn-secondary">reply</button> 
+                                </form>
+
+                          </div>
+                    </div>
+                    <hr> <br/>
+                    
+
+                {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+</div>
+
+
+{% endblock body %}

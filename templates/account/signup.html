@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP" crossorigin="anonymous">
+  <style>
+  .input-group-text {
+    background: #494848 !important;
+    color: white !important;
+    border: 0 !important;
+    border-radius: 0.25rem 0 0 0.25rem !important;
+  }
+</style>
+</head>
+<nav class="navbar navbar-expand-lg navbar-dark bg-secondary">
+  <a class="navbar-brand" href="#">WebSocial</a>
+</nav>
+<body>
+  <h3>Create User Account</h3>
+<div class="card" style="width: 25rem;">
+  <div class="card-body">
+    Already A User?  <button type="button" class="btn btn-link" data-toggle="modal" data-target="#LoginModal">Login
+    </button>
+    <form method="POST" action="" class = "my-4">
+        {% csrf_token %}
+        <div class="form-group">
+          <div class="input-group-append">
+            <span class="input-group-text"><i class="fas fa-user"></i></span>
+              {{form.username}}
+
+          </div>
+
+          
+        </div>
+        <div class="form-group">
+          <div class="input-group-append">
+            <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+              {{form.email}}
+
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="input-group-append">
+            <span class="input-group-text"><i class="fas fa-key"></i></span>
+              {{form.password1}}
+          </div>      
+        </div>
+
+          <div class="form-group">
+            <div class="input-group-append">
+              <span class="input-group-text"><i class="fas fa-key"></i></span>
+                {{form.password2}}
+            </div>
+          </div>
+         
+          {{form.errors}}
+      
+          {% for message in messages %}
+          <div class="alert alert-warning" role="alert">
+            {{message}}
+          </div>
+          {% endfor %}
+          <br>
+        <input type="submit" class="btn btn-primary" value ="Sign Up">
+        
+      </form>
+    </div>
+  </div>
+
+  <div class="modal fade" id="LoginModal" tabindex="-1" role="dialog" aria-labelledby="LoginModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="LoginModalLabel">Login</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body ">
+          <div class="card" style="width: 29rem;">
+            <div class="card-body">
+              <form method = "POST" action="login">
+                {% csrf_token %}
+                <div class="form-group">
+                    <div class="input-group-append">
+                      <span class="input-group-text"><i class="fas fa-user"></i></span>
+                      <input placeholder = "Username" type="text" class="form-control" name="username" >
+
+                    </div>
+                </div>
+                <div class="form-group">
+                      <div class="input-group-append">
+                        <span class="input-group-text"><i class="fas fa-key"></i></span>
+                        <input placeholder = "Password" type="password" class="form-control" name="password">
+
+                      </div>
+                </div>
+                {% for message in messages %}
+                    {{message}}
+                {% endfor %}
+                <input type="submit" class="btn btn-primary" value="Login">
+              </form>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+</body>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+
+<script>
+    var form_fields = document.getElementsByTagName('input')
+		form_fields[1].placeholder='Username..';
+		form_fields[2].placeholder='Email..';
+		form_fields[3].placeholder='Enter password...';
+		form_fields[4].placeholder='Re-enter Password...';
+
+
+		for (var field in form_fields){	
+			form_fields[field].className += ' form-control'
+		}
+</script>
+</html>
+

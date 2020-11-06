@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block css %}
+<style>
+    #post_img{
+        width: 460px;
+        height: 360px;
+    }
+
+    .div_posts{
+        width: 535px;
+        
+    }
+</style>
+
+{% endblock css %}
+{% block body %}
+<div class="mx-4">
+<button type="button" class="btn btn-link" data-toggle="modal" data-target="#PostModal">Post
+</button>
+</div>
+
+<div class="modal fade" id="PostModal" tabindex="-1" role="dialog" aria-labelledby="PostModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="LoginModalLabel">Modal title</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form action="{% url 'post' %}" method = "POST"  enctype="multipart/form-data">
+              {% csrf_token %}
+              <div class="form-group">
+                <label for="">Post an Image</label>
+                <input type="file" class="form-control" name="post_image" id="post_image">
+              </div>
+              <br><br>
+              <div class="form-group">
+                <label for="exampleInputPassword1">Caption:</label><br>
+                <textarea class="form-control" name="captions" id = "captions" cols="55" rows="8"></textarea>
+              </div>
+              <input type="submit" class="btn btn-primary" value="Post">
+            </form>
+          </div>
+          
+        </div>
+      </div>
+</div>
+
+  <div class = "container" style = "width: 70rem;">
+      {% for message in messages %}
+            <div class="alert alert-primary" role="alert">
+                {{message}}
+            </div>
+      {% endfor %}
+  </div>
+
+
+      {% for post in posts %}
+            {% if request.user %}
+      <div class="container my-4 div_posts" id="{{post.id}}">
+        <div class="card">
+            <h6 class="card-header"><a href="{% url 'profiles' user.id %}">{{post.user}}</a> <small>{{post.date}}</small></h6>
+            <div class="card-body">
+                <p class="card-text">{{post.caption}}</p>
+                {% if post.image %}
+                    <img src = "{{post.image.url}}" alt="image" id="post_img">
+                {% endif %}
+                <hr size="50px">
+                
+                
+                <a href="{% url 'post_detail' post.pk %}" class="btn btn-primary">View Post</a>
+
+                {% if request.user == post.user %}
+                  <a class="btn btn-danger ml-4 delete" href="{% url 'deletepost' post.id %}" id = "{{post.id}}">Delete</a>
+                {% endif %}
+            </div>
+        </div>
+      </div>
+            {% endif %}
+       {% endfor %}
+  
+ 
+
+
+{% endblock body %}
+
+{% block jquery %}
+<script type="text/javascript"> 
+
+  $(".delete").click(function(e) {
+    var id = this.id ;
+    var href = this.href;
+    console.log(href, id)
+    e.preventDefault();
+
+    $.ajax({
+      url: href,
+      data: {}, 
+    });
+
+    $("#" + id).fadeOut(1000);
+
+
+  })
+
+</script>
+{% endblock jquery %}

@@ -1,0 +1,106 @@
+{% extends 'base.html'%}
+{% block css %}
+    <style>
+        .profile-pic{
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            margin: 20px;
+            background-color: aliceblue;
+            object-fit: cover;
+            object-position: center;
+        }
+
+        .post{
+            width: 350px;
+            height: 200px;
+            margin-bottom: 30px;
+
+        }
+
+        .proifile-button{
+                border-color: rgb(246, 246, 247);
+                background-color: aliceblue;
+                cursor: pointer;
+                height: 80%;
+                padding: 10;
+                width: 80%;
+            }
+        
+        
+
+        
+        
+    </style>
+{% endblock css %}
+{% block body %}
+
+
+
+<div class="container my-4" >
+    <div class="row">
+        
+      <div class="wrapper">
+          <button class="profile-button" title="Change Profile">
+            <img src="{{profile_pic.url}}" class="profile-pic" alt="Profile Pic">
+
+          </button>
+      </div>
+      <div class="col-md-8">
+        <div class="card-body">
+          {% for user in profile.user.all %}
+          <h5 class="card-title">{{user.username}}
+              {% if connection and not request.user == user.username %}
+                <a type="button" class="btn btn-outline-primary" role="button" id="follow" href="{% url 'follow' user_obj.username %}">Unfollow</a>
+              {% elif not request.user == user.username %}
+                <a type="button" class="btn btn-outline-primary" role="button" id="follow" href="{% url 'follow' user_obj.username %}">Follow</a>
+              {% endif %}
+
+            </h5>
+          
+              <a href="#" style="margin-right:10px" tableindex=0 ><span> {{user.followers}} </span>followers</a>
+
+              <a href="#" tableindex=0 > {{user.following}} : following</a>
+
+              <br>
+              <br>
+
+          
+          <p class="card-text">{{user.about}}</p>
+          <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+          
+        </div>
+      </div>
+    </div>
+    <hr size="150px" color="black">
+
+    
+  
+
+  </div>
+
+  
+{% endblock body %}
+
+{% block jquery %}
+<script type="text/javascript">
+    $("#follow").click(function(e){
+        e.preventDefault();
+        var href = this.href;
+        $.ajax({
+            url: href,
+            success: function(response){
+                console.log(response)
+                if (response["following"]){
+                    $("#follow").html("Unfollow");
+                }
+                else{
+                    $("#follow").html("Follow");
+                }
+            }
+        })
+    })
+</script>
+
+
+{% endblock jquery %}

@@ -1,0 +1,16 @@
+{% extends 'base.html'%}
+
+{% block body %}
+
+<div class = "container my-4 mx-4">
+    {% for i in object_list %}
+    <div class="card my-2">
+        <div class="card-body">
+          <a href="{% url 'profiles' i.username %}">{{i.username}}</a>
+        </div>
+      </div>
+    {% endfor %}
+</div>
+
+
+{% endblock body %}
